@@ -1,6 +1,7 @@
 const express = require("express");
 const GameOfLife = require("./logic.js");
 const cors = require("cors");
+const { sendData } = require("./helper.js");
 const app = express();
 
 const port = 3000;
@@ -26,29 +27,23 @@ for (let i = 0; i < INITIAL_CELLS; i++) {
 
 const board = new GameOfLife(height, width, initialCells);
 
+let intervalId;
+
 app.get("/board", (req, res) => {
   // Set headers for SSE
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
+  sendData(res, board);
 
-  // function to send data
-  const sendData = () => {
-    const resp = {
-      aliveCells: Array.from(board.aliveCells),
-      purchasedCells: Array.from(board.purchasedCells),
-      height: board.height,
-      width: board.width,
-    };
-    res.write(`data: ${JSON.stringify(resp)}\n\n`);
-  };
-
-  sendData();
-
-  setInterval(() => {
-    board.simulate(1, 0);
-    sendData();
-  }, REFRESH_RATE);
+  if (!intervalId) {
+    intervalId = setInterval(() => {
+      if (board.grid && board.grid.length > 0) {
+        board.simulate(1, 0);
+        sendData(res, board);
+      }
+    }, REFRESH_RATE);
+  }
 });
 
 app.post("/purchase", (req, res) => {
@@ -76,7 +71,7 @@ app.get("/reset", (req, res) => {
     });
   }
   board.reset(initialCells);
-  res.send({status: "ok"});
+  res.send({ status: "ok" });
 });
 
 app.listen(port, () => {
