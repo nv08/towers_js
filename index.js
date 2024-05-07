@@ -5,7 +5,7 @@ const { sendData } = require("./helper.js");
 const app = express();
 
 const port = 3000;
-const REFRESH_RATE = 15000;
+const REFRESH_RATE = 20000;
 const height = 100;
 const width = 100;
 const INITIAL_CELLS = 0.35 * height * width;

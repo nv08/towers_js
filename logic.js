@@ -77,32 +77,10 @@ class GameOfLife {
     return count;
   }
 
-  // it should throw json board
-  printGrid() {
-    // for (let y = 0; y < this.height; y++) {
-    //   let row = "";
-    //   for (let x = 0; x < this.width; x++) {
-    //     row += this.grid[y][x] === 1 ? "■" : "□";
-    //   }
-    //   console.log(row);
-    // }
-    // console.log("\n");
-  }
-
-  //   simulate(numGenerations, delay) {
-  //     for (let i = 0; i < numGenerations; i++) {
-  //       this.printGrid();
-  //       this.grid = this.getNextGeneration();
-  //       if (delay) {
-  //         setTimeout(() => {}, delay);
-  //       }
-  //     }
-  //   }
   simulate(numGenerations, delay) {
     if (numGenerations <= 0) {
       return;
     }
-    this.printGrid();
     this.grid = this.getNextGeneration();
     setTimeout(() => {
       this.simulate(numGenerations - 1, delay);
