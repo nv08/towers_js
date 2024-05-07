@@ -48,11 +48,7 @@ app.get("/board", (req, res) => {
 
 app.post("/purchase", (req, res) => {
   const { x, y } = req.query;
-  const isToggled = board.toggleCell(parseInt(x), parseInt(y));
-  console.log("purchase", x, y, isToggled);
-  if (isToggled) {
-    board.simulate(1, 0);
-  }
+  board.toggleCell(parseInt(x), parseInt(y));
   res.send({
     aliveCells: Array.from(board.aliveCells),
     purchasedCells: Array.from(board.purchasedCells),
